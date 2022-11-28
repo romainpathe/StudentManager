@@ -25,6 +25,8 @@ typedef struct Enrollment{
 
 void PrintMenu();
 void listStudent(Student [], int);
+void findStudentByName(Student [], int);
+void findStudentById(Student [], int);
 void listCourse(Course [], int);
 void listEnrollment(Enrollment [], int, Student [], int, Course [], int);
 void studentReport(Enrollment [], int, Course [], int);
@@ -48,13 +50,14 @@ int main( )
     int enrollmentCount = initEnrollment(enrollmentList, 1000);
     while (1){
         PrintMenu();
-        int x = scanf_s("%c", &input);
+        scanf_s("%c", &input);
         switch (input) {
             case 'a':
             {
                 Student student = createStudent();
                 studentList[studentCount] = student;
                 studentCount++;
+                system("cls");
                 break;
             }
             case 'b':
@@ -62,6 +65,7 @@ int main( )
                 Course course = createCourse();
                 courseList[courseCount] = course;
                 courseCount++;
+                system("cls");
                 break;
             }
             case 'c':
@@ -69,6 +73,7 @@ int main( )
                 Enrollment enrollment = createEnrollment();
                 enrollmentList[enrollmentCount] = enrollment;
                 enrollmentCount++;
+                system("cls");
                 break;
             }
             case 'd':
@@ -87,18 +92,24 @@ int main( )
                 studentReport(enrollmentList, enrollmentCount, courseList, courseCount);
                 getchar();
                 break;
+            case 'h':
+                findStudentByName(studentList, studentCount);
+                break;
+            case 'i':
+                findStudentById(studentList, studentCount);
+                break;
             case 's':
                 saveData(studentList, studentCount, courseList, courseCount, enrollmentList, enrollmentCount);
                 getchar();
                 break;
             default:
                 system("cls");
+                printf("%s\n", error);
                 break;
         }
-        if (x == 1){
-            printf("%s\n", error);
-            continue;
-        }
+//        if (x == 1){
+//            continue;
+//        }
     }
 
 }
@@ -112,13 +123,15 @@ void PrintMenu(){
     printf("e. List all course\n");
     printf("f. List all enrollment\n");
     printf("g. Student report\n");
+    printf("h. Find student by name\n");
+    printf("i. Find student by id\n");
     printf("s. Save data\n");
     printf("Enter your choice:");
 }
 
 Student createStudent(){
 
-    struct Student st;
+    struct Student st = {0};
     printf("Enter the student's firstname: ");
     scanf_s("%s", st.firstname);
     printf("Enter the student's lastname: ");
@@ -194,10 +207,40 @@ void saveStudent(Student studentList[], int studentCount){
 }
 
 void listStudent(Student studentList[], int studentCount){
-
-    printf("Student List\nStudent ID\tFirst Name\tLast Name\tEmail\tPhone\tAge\n");
+    printf("Student List\nStudent ID           First Name           Last Name            Email                     Phone                Age\n");
     for (int i = 0; i < studentCount; i++){
-        printf("%d \t %s \t %s \t %s \t %d \t %d\n", studentList[i].id, studentList[i].firstname, studentList[i].lastname, studentList[i].email, studentList[i].phone, studentList[i].age);
+        printf("%-20d %-20s %-20s %-25s %-20d %-20d\n", studentList[i].id, studentList[i].firstname, studentList[i].lastname, studentList[i].email, studentList[i].phone, studentList[i].age);
+    }
+}
+
+void findStudentByName(Student studentList[], int studentCount){
+    char name[100];
+    printf("Enter the student's firstname or lastname: ");
+    scanf_s("%s", name);
+    printf("Find student by name\nStudent ID           First Name           Last Name            Email                     Phone                Age\n");
+    for (int i = 0; i < studentCount; ++i) {
+        int x = strcmp(name, studentList[i].firstname);
+        int y = strcmp(name, studentList[i].lastname);
+        if(x == 0 || y == 0){
+            printf("%-20d %-20s %-20s %-25s %-20d %-20d\n", studentList[i].id, studentList[i].firstname, studentList[i].lastname, studentList[i].email, studentList[i].phone, studentList[i].age);
+        }
+    }
+}
+
+void findStudentById(Student studentList[], int studentCount){
+    int id = 0;
+    int data = 0;
+    printf("Enter the student's id: ");
+    scanf_s("%d", &id);
+    printf("Find student by id\nStudent ID           First Name           Last Name            Email                     Phone                Age\n");
+    for (int i = 0; i < studentCount; ++i) {
+        if(id == studentList[i].id){
+            data = 1;
+            printf("%-20d %-20s %-20s %-25s %-20d %-20d\n", studentList[i].id, studentList[i].firstname, studentList[i].lastname, studentList[i].email, studentList[i].phone, studentList[i].age);
+        }
+    }
+    if (data == 0){
+        printf("No data found\n");
     }
 }
 
