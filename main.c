@@ -77,28 +77,35 @@ int main( )
                 break;
             }
             case 'd':
+                system("cls");
                 listStudent(studentList, studentCount);
                 getchar();
                 break;
             case 'e':
+                system("cls");
                 listCourse(courseList, courseCount);
                 getchar();
                 break;
             case 'f':
+                system("cls");
                 listEnrollment(enrollmentList, enrollmentCount, studentList, studentCount, courseList, courseCount);
                 getchar();
                 break;
             case 'g':
+                system("cls");
                 studentReport(enrollmentList, enrollmentCount, courseList, courseCount);
                 getchar();
                 break;
             case 'h':
                 findStudentByName(studentList, studentCount);
+                getchar();
                 break;
             case 'i':
                 findStudentById(studentList, studentCount);
+                getchar();
                 break;
             case 's':
+                system("cls");
                 saveData(studentList, studentCount, courseList, courseCount, enrollmentList, enrollmentCount);
                 getchar();
                 break;
@@ -200,7 +207,7 @@ void saveStudent(Student studentList[], int studentCount){
         return;
     }
     for (int i = 0; i < studentCount; i++) {
-        fprintf(fp, "%s,%s,%d,%s,%d,%d", studentList[i].firstname, studentList[i].lastname, studentList[i].id,
+        fprintf(fp, "%s,%s,%d,%s,%d,%d\n", studentList[i].firstname, studentList[i].lastname, studentList[i].id,
                 studentList[i].email, studentList[i].phone, studentList[i].age);
     }
     fclose(fp);
@@ -236,7 +243,7 @@ void findStudentById(Student studentList[], int studentCount){
     for (int i = 0; i < studentCount; ++i) {
         if(id == studentList[i].id){
             data = 1;
-            printf("%-20d %-20s %-20s %-25s %-20d %-20d\n", studentList[i].id, studentList[i].firstname, studentList[i].lastname, studentList[i].email, studentList[i].phone, studentList[i].age);
+            printf("%-20d %-20s %-20s %-25s %-20d %-20d", studentList[i].id, studentList[i].firstname, studentList[i].lastname, studentList[i].email, studentList[i].phone, studentList[i].age);
         }
     }
     if (data == 0){
@@ -298,15 +305,15 @@ void saveCourse(Course courseList[], int courseCount){
         return;
     }
     for (int i = 0; i < courseCount; i++) {
-        fprintf(fp, "%s,%d,%d", courseList[i].name, courseList[i].id, courseList[i].credits);
+        fprintf(fp, "%s,%d,%d\n", courseList[i].name, courseList[i].id, courseList[i].credits);
     }
     fclose(fp);
 }
 
 void listCourse(Course courseList[], int courseCount){
-    printf("Course List\nCourse ID\tCourse Name\tCredits\n");
+    printf("Course List\nCourse ID\tCourse Name\t      Credits\n");
     for (int i = 0; i < courseCount; i++){
-        printf("%d \t %s \t %d\n", courseList[i].id, courseList[i].name, courseList[i].credits);
+        printf("%-20d %-20s %-20d\n", courseList[i].id, courseList[i].name, courseList[i].credits);
     }
 }
 
@@ -364,7 +371,7 @@ void saveEnrollment(Enrollment enrollmentList[], int enrollmentCount){
         return;
     }
     for (int i = 0; i < enrollmentCount; i++) {
-        fprintf(fp, "%d,%d,%d", enrollmentList[i].studentId, enrollmentList[i].courseId, enrollmentList[i].grade);
+        fprintf(fp, "%d,%d,%d\n", enrollmentList[i].studentId, enrollmentList[i].courseId, enrollmentList[i].grade);
     }
     fclose(fp);
 }
@@ -388,15 +395,15 @@ void listEnrollment(Enrollment enrollmentList[], int enrollmentCount, Student st
                 break;
             }
         }
-        printf("%s \t %s \t %d\n", studentName, courseName, enrollmentList[i].grade);
+        printf("%-20s %-20s %-20d\n", studentName, courseName, enrollmentList[i].grade);
     }
 }
 
 void studentReport(Enrollment enrollmentList[], int enrollmentCount, Course courseList[], int courseCount){
     printf("Enter the student's id: ");
-    int studentId;
+    int studentId = 0;
     scanf_s("%d", &studentId);
-    printf("Student Report\nCourse Name\tGrade\n");
+    printf("Student Report\nCourse Name\t       Grade\n");
     double CGPA = 0;
     int creditCount = 0;
     int gradeCount = 0;
@@ -412,11 +419,12 @@ void studentReport(Enrollment enrollmentList[], int enrollmentCount, Course cour
             CGPA += enrollmentList[i].grade * courseList[i].credits;
             creditCount += courseList[i].credits;
             gradeCount++;
-            printf("%s \t %d\n", courseName, enrollmentList[i].grade);
+            printf("%-20s %-20d\n", courseName, enrollmentList[i].grade);
         }
     }
+    printf("credit: %d", creditCount);
     CGPA = CGPA / creditCount;
-    printf("CGPA: %f\n", CGPA);
+    printf("CGPA: %-20f\n", CGPA);
 }
 
 void saveData(Student studentList[], int studentCount, Course courseList[], int courseCount, Enrollment enrollmentList[], int enrollmentCount){
